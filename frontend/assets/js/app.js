@@ -11,7 +11,6 @@ qs('#registerForm').addEventListener('submit', async e => {
   e.preventDefault();
   const fd = new FormData(e.target);
   const body = { email: fd.get('email'), name: fd.get('name'), password: fd.get('password') };
-
   try {
     const res = await fetch(API + '/users', {
       method: 'POST',
@@ -30,7 +29,6 @@ qs('#loginForm').addEventListener('submit', async e => {
   e.preventDefault();
   const fd = new FormData(e.target);
   const body = { email: fd.get('email'), password: fd.get('password') };
-
   try {
     const res = await fetch(API + '/login', {
       method: 'POST',
@@ -39,7 +37,6 @@ qs('#loginForm').addEventListener('submit', async e => {
     });
     const data = await res.json();
     qs('#loginResult').textContent = JSON.stringify(data, null, 2);
-
     if (res.ok) {
       token = data.token;
       me = data;
@@ -55,7 +52,24 @@ qs('#listUsers').addEventListener('click', async () => {
   try {
     const resUsers = await fetch(API + '/public/users/history');
     const users = await resUsers.json();
-    qs('#usersList').textContent = JSON.stringify(users, null, 2);
+    const formatted = users.map(user => {
+      const drinksByDay = {};
+      user.history.forEach(entry => {
+        const date = entry.date.split(' ')[0];
+        if (!drinksByDay[date]) drinksByDay[date] = 0;
+        drinksByDay[date] += entry.drinkCounter;
+      });
+      const dailyHistory = Object.keys(drinksByDay).map(date => ({
+        date,
+        totalDrinks: drinksByDay[date]
+      }));
+      return {
+        name: user.name,
+        email: user.email,
+        dailyHistory
+      };
+    });
+    qs('#usersList').textContent = JSON.stringify(formatted, null, 2);
   } catch (err) {
     qs('#usersList').textContent = 'Error: ' + err;
   }
@@ -99,12 +113,10 @@ qs('#refreshProfile').addEventListener('click', async () => {
 qs('#editUserForm').addEventListener('submit', async e => {
   e.preventDefault();
   if (!me) return alert('Please login first');
-
   const fd = new FormData(e.target);
   const body = {};
   if (fd.get('name')) body.name = fd.get('name');
   if (fd.get('password')) body.password = fd.get('password');
-
   try {
     const res = await fetch(API + `/users/${me.iduser}`, {
       method: 'PUT',
@@ -123,7 +135,6 @@ qs('#editUserForm').addEventListener('submit', async e => {
 qs('#deleteUser').addEventListener('click', async () => {
   if (!me) return alert('Please login first');
   if (!confirm('Are you sure you want to delete your account?')) return;
-
   try {
     const res = await fetch(API + `/users/${me.iduser}`, {
       method: 'DELETE',
@@ -136,6 +147,7 @@ qs('#deleteUser').addEventListener('click', async () => {
       token = null;
       me = null;
       qs('#profile').textContent = '';
+      window.location.reload();
     }
   } catch (err) {
     qs('#deleteResult').textContent = 'Error: ' + err;
