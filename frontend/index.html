@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Coffee Tracker - Demo</title>
+  <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+
+<body>
+  <div class="container">
+    <h1>Coffee Tracker</h1>
+
+    <section class="card">
+      <h2>Register</h2>
+      <form id="registerForm">
+        <input name="email" placeholder="Email" required>
+        <input name="name" placeholder="Name" required>
+        <input name="password" placeholder="Password" type="password" required>
+        <button type="submit">Register</button>
+      </form>
+      <pre id="registerResult"></pre>
+    </section>
+
+    <section class="card">
+      <h2>Login</h2>
+      <form id="loginForm">
+        <input name="email" placeholder="Email" required>
+        <input name="password" placeholder="Password" type="password" required>
+        <button type="submit">Login</button>
+      </form>
+      <pre id="loginResult"></pre>
+    </section>
+
+    <section class="card">
+      <h2>My Profile</h2>
+      <div id="profile"></div>
+      <button id="incDrink">I drank coffee</button>
+      <button id="refreshProfile">Refresh</button>
+
+      <h3>Edit My Profile</h3>
+      <form id="editUserForm">
+        <input name="name" placeholder="New Name">
+        <input name="password" placeholder="New Password" type="password">
+        <button type="submit">Update</button>
+      </form>
+      <pre id="editResult"></pre>
+
+      <h3>Delete My Account</h3>
+      <button id="deleteUser">Delete</button>
+      <pre id="deleteResult"></pre>
+    </section>
+
+    <section class="card">
+      <h2>Users</h2>
+      <button id="listUsers">List Users</button>
+      <pre id="usersList"></pre>
+    </section>
+
+  </div>
+  <script src="./assets/js/app.js"></script>
+</body>
+
+</html>
