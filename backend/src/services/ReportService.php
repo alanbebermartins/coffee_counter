@@ -6,7 +6,9 @@ use Src\Response;
 
 class ReportService {
     private $drinkModel;
-    public function __construct($pdo) { $this->drinkModel = new Drink($pdo); }
+    public function __construct($pdo) { 
+        $this->drinkModel = new Drink($pdo); 
+    }
 
     public function history($userId) {
         return $this->drinkModel->historyByUser($userId);
